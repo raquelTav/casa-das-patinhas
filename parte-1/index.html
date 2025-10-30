@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casa das Patinhas</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-content container">
+            <nav role="navigation" id="main-navigation" aria-label="Navegação Principal">
+                <ul>
+                    <li><a href="/" data-nav-link>Início</a></li>
+                    <li><a href="/projetos" data-nav-link>Projetos</a></li>
+                    <li><a href="/cadastro" data-nav-link>Cadastro</a></li>
+                </ul>
+            </nav>
+
+            <button class="nav-toggle" aria-expanded="false" aria-controls="main-navigation">
+                <span class="sr-only">Menu</span>
+                <span class="nav-toggle-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+    </header>
+
+    <main id="app-root" class="container">
+        </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; <span id="ano-footer"></span> Casa das Patinhas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
