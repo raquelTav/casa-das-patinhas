@@ -1,8 +1,6 @@
-/* Importação de Fonte Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 :root {
-    /* Cores (8 variáveis) */
     --color-primary: #4CAF50;
     --color-secondary: #FFC107;
     --color-accent: #388E3C;
@@ -12,25 +10,22 @@
     --color-white: #ffffff;
     --color-border: #B2DFDB;
 
-    /* Tipografia (5 tamanhos hierárquicos) */
     --fs-h1: 2.5rem;
     --fs-h2: 1.8rem;
     --fs-h3: 1.4rem;
     --fs-body: 1rem;
     --fs-small: 0.85rem;
 
-    /* Espaçamento Modular (Base 8px, 6 variáveis) */
-    --space-xs: 8px;    /* 8px */
-    --space-sm: 16px;   /* 16px */
-    --space-md: 24px;   /* 24px */
-    --space-lg: 32px;   /* 32px */
-    --space-xl: 48px;   /* 48px */
-    --space-xxl: 64px;  /* 64px */
+    --space-xs: 8px;    
+    --space-sm: 16px;  
+    --space-md: 24px;  
+    --space-lg: 32px;   
+    --space-xl: 48px;   
+    --space-xxl: 64px;  
 
     --font-primary: 'Poppins', sans-serif;
     --header-height: 60px;
 
-    /* Variáveis do Sistema de Grid de 12 Colunas */
     --grid-columns: 12;
     --grid-gutter: var(--space-sm);
 }
