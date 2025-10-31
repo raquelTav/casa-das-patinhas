@@ -349,7 +349,7 @@ const spaRouter = {
     headerContainer: null, 
     navLinks: [],
 
-    BASE_PATH: '/casa-das-patinhas/parte-4', 
+    BASE_PATH: '', // CORREÇÃO APLICADA AQUI
     
 
     routes: { 
@@ -363,6 +363,12 @@ const spaRouter = {
         
         if (this.BASE_PATH !== '' && path.startsWith(this.BASE_PATH)) {
             path = path.substring(this.BASE_PATH.length);
+        }
+
+        // Corrige o path removendo a subpasta /casa-das-patinhas/parte-4/
+        const subfolder = '/casa-das-patinhas/parte-4';
+        if (path.startsWith(subfolder)) {
+            path = path.substring(subfolder.length);
         }
 
         if (path === '' || path === '/') {
@@ -419,7 +425,7 @@ const spaRouter = {
         if (targetPath === '') { targetPath = '/index.html'; }
         else if (!targetPath.startsWith('/')) { targetPath = '/' + targetPath; }
 
-        let fullPath = `${this.BASE_PATH}${targetPath}`;
+        let fullPath = `/casa-das-patinhas/parte-4${targetPath}`; // Aqui precisa reconstruir o caminho completo para o history.pushState
         if (targetHash) fullPath += `#${targetHash}`;
 
         const currentPath = window.location.pathname;
