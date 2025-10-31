@@ -38,8 +38,7 @@ const pageTemplates = {
             <article class="project" aria-labelledby="voluntariado-title">
             <h3 id="voluntariado-title">Voluntariado</h3>
             <figure>
-                <img src="assets/imagens/voluntarios-ONG.jpg" alt="Voluntária cuidando de um cão">
-                <figcaption>Voluntária cuidando de um dos animais resgatados.</figcaption>
+                <img src="assets/imagens/voluntarios-ONG.jpg" alt="Voluntáros em nossa ONG">
             </figure>
             <p>Quem pode ser voluntário? Qualquer pessoa maior de idade, com disponibilidade mínima semanal, pode participar. Temos tarefas presenciais e remotas.</p>
             <h4>Como se inscrever</h4>
