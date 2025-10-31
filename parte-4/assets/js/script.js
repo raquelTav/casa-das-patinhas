@@ -10,7 +10,7 @@ const pageTemplates = {
             <p>Atuamos nas áreas de resgate, castração, educação e reintegração familiar para animais em situação de risco.</p>
             </div>
             <figure>
-            <img src="assets/imagens/voluntarios-ONG.jpg" alt="pessoa cercada por cães" width="400">
+            <img src="assets/imagens/Voluntária-ONG.jpg" alt="pessoa cercada por cães" width="400">
             <figcaption>Voluntária visitando nossa ONG.</figcaption>
             </figure>
         </section>
