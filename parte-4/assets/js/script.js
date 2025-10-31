@@ -8,8 +8,8 @@ const pageTemplates = {
                     <li>
                         <a href="/projetos.html" data-nav-link aria-haspopup="true" aria-expanded="false">Projetos</a>
                         <ul class="dropdown-menu">
-                            <li><a href="/projetos.html#adocao" data-nav-link>Adoção</a></li>
                             <li><a href="/projetos.html#voluntariado" data-nav-link>Voluntariado</a></li>
+                            <li><a href="/projetos.html#castracao" data-nav-link>Saúde Animal</a></li>
                         </ul>
                     </li>
                     <li><a href="/cadastro.html" data-nav-link>Cadastro</a></li>
@@ -38,7 +38,7 @@ const pageTemplates = {
             <figcaption>Voluntária visitando nossa ONG.</figcaption>
             </figure>
         </section>
-        <section aria-labelledby="contato-title">
+        <section aria-labelledby="contato-title" class="card">
             <h2 id="contato-title">Informações de contato</h2>
             <address>
             <p><strong>Telefone:</strong> (85) 98678-9980</p>
@@ -46,7 +46,7 @@ const pageTemplates = {
             <p><strong>Endereço (sede):</strong> Rua cinco, 333 — Fortaleza, CE</p>
             </address>
         </section>
-        <section aria-labelledby="adote-title">
+        <section aria-labelledby="adote-title" class="card">
             <h2 id="adote-title">Como adotar</h2>
             <p>Você pode conhecer nossos animais através das campanhas e feiras de adoção. Para iniciar o processo, preencha o formulário de cadastro e agende uma visita.</p>
             <p><a href="/cadastro.html" class="btn btn-cta" data-nav-link>Ir para o formulário de cadastro</a></p>
@@ -60,11 +60,11 @@ const pageTemplates = {
         main: `
         <section class="projects" aria-labelledby="projetos-title">
             <h2 id="projetos-title">Nossas iniciativas</h2>
-            <article class="project" aria-labelledby="voluntariado-title">
+            
+            <article class="project" id="voluntariado" aria-labelledby="voluntariado-title">
                 <div class="tags">
                     <span class="badge">Adoção</span>
-                    <span class="badge badge-secondary">Cuidado</span>
-                    <span class="badge">Comunidade</span>
+                    <span class="badge badge-secondary">Comunidade</span>
                 </div>
                 
                 <h3 id="voluntariado-title">Voluntariado</h3>
@@ -80,10 +80,10 @@ const pageTemplates = {
                 </ol>
             </article>
             
-            <article class="project" aria-labelledby="castracao-title">
+            <article class="project" id="castracao" aria-labelledby="castracao-title">
                 <div class="tags">
-                    <span class="badge">Saúde</span>
-                    <span class="badge badge-secondary">Prevenção</span>
+                    <span class="badge badge-secondary">Saúde</span>
+                    <span class="badge">Prevenção</span>
                 </div>
                 
                 <h3 id="castracao-title">Castração e Saúde Animal</h3>
@@ -189,12 +189,10 @@ const pageTemplates = {
 const mobileNavModule = {
     init() {
         const navToggle = document.querySelector('.nav-toggle');
-        const nav = document.querySelector('header nav');
-
-        if (!navToggle || !nav) return;
+        
+        if (!navToggle) return;
 
         navToggle.removeEventListener('click', this.toggleNav.bind(this));
-        
         navToggle.addEventListener('click', this.toggleNav.bind(this));
         
         document.querySelectorAll('header nav a').forEach(link => {
@@ -213,7 +211,7 @@ const mobileNavModule = {
     
     closeNav() {
         const navToggle = document.querySelector('.nav-toggle');
-        if (window.innerWidth <= 768 && document.body.classList.contains('nav-open')) {
+        if (window.innerWidth <= 991 && document.body.classList.contains('nav-open')) {
             document.body.classList.remove('nav-open');
             if (navToggle) {
                 navToggle.setAttribute('aria-expanded', 'false');
@@ -283,14 +281,14 @@ const formModule = {
             return; 
         }
         
-        if (!formModule.utils.validarCPF(cpfInput.value)) { 
+        if (cpfInput && !formModule.utils.validarCPF(cpfInput.value)) { 
             msg.textContent = 'CPF inválido. Verifique o número digitado.'; 
             msg.className = 'small error'; 
             cpfInput.focus(); 
             return; 
         }
 
-        if (nascimentoInput.value) {
+        if (nascimentoInput && nascimentoInput.value) {
             const hoje = new Date();
             const nasc = new Date(nascimentoInput.value + 'T00:00:00'); 
             let idade = hoje.getFullYear() - nasc.getFullYear();
@@ -327,19 +325,25 @@ const formModule = {
         const cepInput = document.getElementById('cep');
         const msg = document.getElementById('formMessage');
 
-        formModule.utils.aplicarMascara(cpfInput, formModule.utils.mascaraCPF);
-        formModule.utils.aplicarMascara(telInput, formModule.utils.mascaraTelefone);
-        formModule.utils.aplicarMascara(cepInput, formModule.utils.mascaraCEP);
+        if (cpfInput) formModule.utils.aplicarMascara(cpfInput, formModule.utils.mascaraCPF);
+        if (telInput) formModule.utils.aplicarMascara(telInput, formModule.utils.mascaraTelefone);
+        if (cepInput) formModule.utils.aplicarMascara(cepInput, formModule.utils.mascaraCEP);
         
-        const clearErrorListener = () => { msg.textContent = ''; msg.className = 'small'; };
-        [cpfInput, telInput, cepInput, document.getElementById('email'), document.getElementById('nascimento')].forEach(el => {
-            el.addEventListener('input', clearErrorListener);
-            el.addEventListener('focus', clearErrorListener); 
-        });
+        
+        if (msg) {
+            const clearErrorListener = () => { msg.textContent = ''; msg.className = 'small'; };
+            [cpfInput, telInput, cepInput, document.getElementById('email'), document.getElementById('nascimento')].forEach(el => {
+                if(el) el.addEventListener('input', clearErrorListener);
+                if(el) el.addEventListener('focus', clearErrorListener); 
+            });
+        }
     },
 
     destroy() { 
-        
+        const form = document.getElementById('cadastroForm');
+        if (form) {
+            form.removeEventListener('submit', formModule.handleSubmit);
+        }
     },
 };
 
@@ -349,7 +353,7 @@ const spaRouter = {
     headerContainer: null, 
     navLinks: [],
 
-    BASE_PATH: '', // CORREÇÃO APLICADA AQUI
+    BASE_PATH: '', 
     
 
     routes: { 
@@ -361,11 +365,6 @@ const spaRouter = {
 
     normalizePath(path) {
         
-        if (this.BASE_PATH !== '' && path.startsWith(this.BASE_PATH)) {
-            path = path.substring(this.BASE_PATH.length);
-        }
-
-        // Corrige o path removendo a subpasta /casa-das-patinhas/parte-4/
         const subfolder = '/casa-das-patinhas/parte-4';
         if (path.startsWith(subfolder)) {
             path = path.substring(subfolder.length);
@@ -395,7 +394,9 @@ const spaRouter = {
         this.navLinks.forEach(link => { link.addEventListener('click', this.navigate.bind(this)); });
         
         this.appRoot.addEventListener('click', (e) => {
-            if (e.target.matches('a[data-nav-link]')) { this.navigate.bind(this)(e); }
+            
+            const target = e.target.closest('a[data-nav-link]');
+            if (target) { this.navigate.bind(this)({ currentTarget: target, preventDefault: e.preventDefault.bind(e) }); }
         });
         
         window.addEventListener('popstate', this.handlePopState.bind(this));
@@ -405,10 +406,6 @@ const spaRouter = {
         this.renderPage(this.normalizePath(window.location.pathname)); 
     },
     
-    renderHeader(pageKey) {
-        
-    },
-
 
     navigate(e) {
         e.preventDefault(); 
@@ -425,7 +422,7 @@ const spaRouter = {
         if (targetPath === '') { targetPath = '/index.html'; }
         else if (!targetPath.startsWith('/')) { targetPath = '/' + targetPath; }
 
-        let fullPath = `/casa-das-patinhas/parte-4${targetPath}`; // Aqui precisa reconstruir o caminho completo para o history.pushState
+        let fullPath = `/casa-das-patinhas/parte-4${targetPath}`; 
         if (targetHash) fullPath += `#${targetHash}`;
 
         const currentPath = window.location.pathname;
