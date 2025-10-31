@@ -286,14 +286,14 @@ const spaRouter = {
         '/index.html': 'home' 
     },
 
-   
+    
     normalizePath(path) {
         
         if (path.startsWith(this.BASE_PATH)) {
             path = path.substring(this.BASE_PATH.length);
         }
 
-       
+        
         if (path === '' || path === '/') {
             return '/index.html'; 
         }
@@ -316,6 +316,7 @@ const spaRouter = {
 
         mobileNavModule.init();
         
+        
         this.renderPage(this.normalizePath(window.location.pathname)); 
     },
 
@@ -324,7 +325,7 @@ const spaRouter = {
         
         let path = e.currentTarget.getAttribute('href');
         
-    
+        
         if (path === '/') { 
             path = '/index.html';
         } else if (path === '/projetos') {
@@ -333,28 +334,30 @@ const spaRouter = {
             path = '/cadastro.html';
         }
 
-        let fullPath = path;
-        if (path.endsWith('.html')) {
-             fullPath = `${this.BASE_PATH}${path}`;
-        }
+       
+        let fullPath = `${this.BASE_PATH}${path}`;
         
         const currentNormalizedPath = this.normalizePath(window.location.pathname);
         
+        
         if (currentNormalizedPath !== path) {
+            
              window.history.pushState(null, '', fullPath);
 
+             
              this.renderPage(path);
         }
     },
 
     handlePopState() {
+        
         this.renderPage(this.normalizePath(window.location.pathname));
     },
 
     renderPage(path) {
         if (path === '/') path = '/index.html';
 
-        const pageKey = this.routes[path] || 'notFound';
+        const pageKey = this.routes[path] || 'notFound'; 
         const pageData = pageTemplates[pageKey];
 
         this.appRoot.innerHTML = pageData.main;
