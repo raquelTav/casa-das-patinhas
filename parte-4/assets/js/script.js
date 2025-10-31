@@ -318,29 +318,29 @@ const spaRouter = {
     navigate(e) {
         e.preventDefault(); 
         
-        let path = e.currentTarget.getAttribute('href');
+        let targetPath = e.currentTarget.getAttribute('href');
         
-        
-        if (path === '/') { 
-            path = '/index.html';
-        } else if (path === '/projetos') {
-            path = '/projetos.html';
-        } else if (path === '/cadastro') { 
-            path = '/cadastro.html';
+        if (targetPath === '/') { 
+            targetPath = '/index.html';
+        } else if (targetPath === '/projetos') {
+            targetPath = '/projetos.html';
+        } else if (targetPath === '/cadastro') { 
+            targetPath = '/cadastro.html';
+        } else if (!targetPath.startsWith('/')) {
+            targetPath = '/' + targetPath; 
         }
-
         
-        let fullPath = `${this.BASE_PATH}${path}`;
+        let fullPath = `${this.BASE_PATH}${targetPath}`;
         
         const currentNormalizedPath = this.normalizePath(window.location.pathname);
         
         
-        if (currentNormalizedPath !== path) {
+        if (currentNormalizedPath !== targetPath) {
              
              window.history.pushState(null, '', fullPath);
 
              
-             this.renderPage(path);
+             this.renderPage(targetPath);
         }
     },
 
@@ -368,7 +368,7 @@ const spaRouter = {
     
         document.title = pageData.title;
 
-        // CORREÇÃO CRÍTICA AQUI: Padroniza o link para comparação
+        
         this.navLinks.forEach(link => {
             let linkPath = link.getAttribute('href');
             
