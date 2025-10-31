@@ -270,13 +270,11 @@ const formModule = {
 };
 
 
-
 const spaRouter = {
     appRoot: null,
     headerContent: null,
     navLinks: [],
 
-    
     BASE_PATH: '/casa-das-patinhas/parte-4', 
     
     routes: { 
@@ -286,14 +284,12 @@ const spaRouter = {
         '/index.html': 'home' 
     },
 
-    
     normalizePath(path) {
         
         if (path.startsWith(this.BASE_PATH)) {
             path = path.substring(this.BASE_PATH.length);
         }
 
-        
         if (path === '' || path === '/') {
             return '/index.html'; 
         }
@@ -316,7 +312,6 @@ const spaRouter = {
 
         mobileNavModule.init();
         
-        
         this.renderPage(this.normalizePath(window.location.pathname)); 
     },
 
@@ -334,14 +329,14 @@ const spaRouter = {
             path = '/cadastro.html';
         }
 
-       
+        
         let fullPath = `${this.BASE_PATH}${path}`;
         
         const currentNormalizedPath = this.normalizePath(window.location.pathname);
         
         
         if (currentNormalizedPath !== path) {
-            
+             
              window.history.pushState(null, '', fullPath);
 
              
@@ -372,11 +367,20 @@ const spaRouter = {
         } 
     
         document.title = pageData.title;
+
+        // CORREÇÃO CRÍTICA AQUI: Padroniza o link para comparação
         this.navLinks.forEach(link => {
-            const linkPath = link.getAttribute('href');
-            const activePath = path === '/index.html' ? '/' : path;
+            let linkPath = link.getAttribute('href');
             
-            if (linkPath === activePath || (linkPath === '/' && activePath === '/')) {
+            if (linkPath === '/') {
+                linkPath = '/index.html';
+            } else if (linkPath === '/projetos') {
+                linkPath = '/projetos.html';
+            } else if (linkPath === '/cadastro') { 
+                linkPath = '/cadastro.html';
+            }
+            
+            if (path === linkPath) {
                  link.classList.add('active');
             } else {
                 link.classList.remove('active');
@@ -406,4 +410,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     spaRouter.init();
 });
-
