@@ -1,4 +1,28 @@
 const pageTemplates = {
+    header: `
+        <div class="header-content container">
+            <h1>Casa das Patinhas</h1>
+            <nav role="navigation" id="main-navigation" aria-label="Navegação Principal">
+                <ul>
+                    <li><a href="/index.html" data-nav-link>Início</a></li>
+                    <li>
+                        <a href="/projetos.html" data-nav-link>Projetos</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/projetos.html#adocao" data-nav-link>Adoção</a></li>
+                            <li><a href="/projetos.html#voluntariado" data-nav-link>Voluntariado</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/cadastro.html" data-nav-link>Cadastro</a></li>
+                </ul>
+            </nav>
+
+            <button class="nav-toggle" aria-expanded="false" aria-controls="main-navigation">
+                <span class="sr-only">Menu</span>
+                <span class="nav-toggle-icon" aria-hidden="true"></span>
+            </button>
+        </div>
+    `,
+    
     home: {
         title: 'Casa das Patinhas — Início',
         header: `<div class="header-brand"><h1>Casa das Patinhas</h1><p>Resgatando e encontrando lares amorosos para cães e gatos.</p></div>`,
@@ -18,7 +42,7 @@ const pageTemplates = {
             <h2 id="contato-title">Informações de contato</h2>
             <address>
             <p><strong>Telefone:</strong> (85) 98678-9980</p>
-            <p><strong>E-mail:</strong> contato@casadaspatinhas.org.br</p>
+            <p><strong>E-mail:</strong> <a href="mailto:contato@casadaspatinhas.org.br">contato@casadaspatinhas.org.br</a></p>
             <p><strong>Endereço (sede):</strong> Rua cinco, 333 — Fortaleza, CE</p>
             </address>
         </section>
@@ -29,6 +53,7 @@ const pageTemplates = {
         </section>
         `,
     },
+    
     projects: {
         title: 'Casa das Patinhas — Projetos',
         header: `<div class="header-brand"><h1>Nossos Projetos</h1></div>`,
@@ -36,21 +61,43 @@ const pageTemplates = {
         <section class="projects" aria-labelledby="projetos-title">
             <h2 id="projetos-title">Nossas iniciativas</h2>
             <article class="project" aria-labelledby="voluntariado-title">
-            <h3 id="voluntariado-title">Voluntariado</h3>
-            <figure>
-                <img src="assets/imagens/voluntarios-ONG.jpg" alt="Voluntáros em nossa ONG">
-            </figure>
-            <p>Quem pode ser voluntário? Qualquer pessoa maior de idade, com disponibilidade mínima semanal, pode participar. Temos tarefas presenciais e remotas.</p>
-            <h4>Como se inscrever</h4>
-            <ol>
-                <li>Preencha o formulário de <a href="/cadastro.html" data-nav-link>cadastro</a>.</li>
-                <li>Participe de uma reunião de orientação.</li>
-                <li>Receba treinamento sobre manejo e cuidado animal.</li>
-            </ol>
+                <div class="tags">
+                    <span class="badge">Adoção</span>
+                    <span class="badge badge-secondary">Cuidado</span>
+                    <span class="badge">Comunidade</span>
+                </div>
+                
+                <h3 id="voluntariado-title">Voluntariado</h3>
+                <figure>
+                    <img src="assets/imagens/voluntarios-ONG.jpg" alt="Voluntáros em nossa ONG">
+                </figure>
+                <p>Quem pode ser voluntário? Qualquer pessoa maior de idade, com disponibilidade mínima semanal, pode participar. Temos tarefas presenciais e remotas.</p>
+                <h4>Como se inscrever</h4>
+                <ol>
+                    <li>Preencha o formulário de <a href="/cadastro.html" data-nav-link>cadastro</a>.</li>
+                    <li>Participe de uma reunião de orientação.</li>
+                    <li>Receba treinamento sobre manejo e cuidado animal.</li>
+                </ol>
+            </article>
+            
+            <article class="project" aria-labelledby="castracao-title">
+                <div class="tags">
+                    <span class="badge">Saúde</span>
+                    <span class="badge badge-secondary">Prevenção</span>
+                </div>
+                
+                <h3 id="castracao-title">Castração e Saúde Animal</h3>
+                <p>Realizamos campanhas de castração de baixo custo e oferecemos suporte veterinário básico para os animais sob nosso cuidado.</p>
+                <h4>Objetivos:</h4>
+                <ul>
+                    <li>Controlar a população de animais de rua.</li>
+                    <li>Garantir a saúde e bem-estar dos animais resgatados.</li>
+                </ul>
             </article>
         </section>
         `,
     },
+    
     register: {
         title: 'Cadastro — Casa das Patinhas',
         header: `<div class="header-brand"><h1>Formulário de Cadastro</h1></div>`,
@@ -130,6 +177,7 @@ const pageTemplates = {
         </form>
         `,
     },
+    
     notFound: {
         title: 'Página não encontrada',
         header: `<div class="header-brand"><h1>Ops! Página não encontrada</h1></div>`,
@@ -149,7 +197,7 @@ const mobileNavModule = {
         
         navToggle.addEventListener('click', this.toggleNav.bind(this));
         
-        nav.querySelectorAll('a').forEach(link => {
+        document.querySelectorAll('header nav a').forEach(link => {
             link.addEventListener('click', this.closeNav);
         });
     },
@@ -165,7 +213,7 @@ const mobileNavModule = {
     
     closeNav() {
         const navToggle = document.querySelector('.nav-toggle');
-        if (document.body.classList.contains('nav-open')) {
+        if (window.innerWidth <= 768 && document.body.classList.contains('nav-open')) {
             document.body.classList.remove('nav-open');
             if (navToggle) {
                 navToggle.setAttribute('aria-expanded', 'false');
@@ -224,21 +272,47 @@ const formModule = {
         const cpfInput = form.querySelector('#cpf');
         const nascimentoInput = form.querySelector('#nascimento');
 
-        if (!form.checkValidity()) { form.reportValidity(); msg.textContent = 'Por favor, corrija os campos obrigatórios.'; msg.className = 'error'; return; }
-        if (!formModule.utils.validarCPF(cpfInput.value)) { msg.textContent = 'CPF inválido. Verifique o número digitado.'; msg.className = 'error'; cpfInput.focus(); return; }
+        
+        msg.textContent = '';
+        msg.className = 'small';
+        
+        if (!form.checkValidity()) { 
+            form.reportValidity(); 
+            msg.textContent = 'Por favor, corrija os campos obrigatórios.'; 
+            msg.className = 'small error';
+            return; 
+        }
+        
+        if (!formModule.utils.validarCPF(cpfInput.value)) { 
+            msg.textContent = 'CPF inválido. Verifique o número digitado.'; 
+            msg.className = 'small error'; 
+            cpfInput.focus(); 
+            return; 
+        }
 
         if (nascimentoInput.value) {
             const hoje = new Date();
-            const nasc = new Date(nascimentoInput.value + 'T00:00:00');
+            const nasc = new Date(nascimentoInput.value + 'T00:00:00'); 
             let idade = hoje.getFullYear() - nasc.getFullYear();
             const m = hoje.getMonth() - nasc.getMonth();
             if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) { idade--; }
-            if (idade < 18) { msg.textContent = 'É necessário ter 18 anos ou mais para se cadastrar.'; msg.className = 'error'; nascimentoInput.focus(); return; }
+            if (idade < 18) { 
+                msg.textContent = 'É necessário ter 18 anos ou mais para se cadastrar.'; 
+                msg.className = 'small error'; 
+                nascimentoInput.focus(); 
+                return; 
+            }
         }
 
         msg.textContent = 'Cadastro enviado com sucesso! Entraremos em contato em breve.';
-        msg.className = '';
-        form.reset();
+        msg.className = 'small alert-success'; 
+        
+      
+        setTimeout(() => {
+            form.reset();
+            msg.textContent = '';
+            msg.className = 'small';
+        }, 3000);
     },
 
     init() {
@@ -256,26 +330,28 @@ const formModule = {
         formModule.utils.aplicarMascara(cpfInput, formModule.utils.mascaraCPF);
         formModule.utils.aplicarMascara(telInput, formModule.utils.mascaraTelefone);
         formModule.utils.aplicarMascara(cepInput, formModule.utils.mascaraCEP);
-    
+        
         const clearErrorListener = () => { msg.textContent = ''; msg.className = 'small'; };
-        [cpfInput, telInput, cepInput, document.getElementById('email')].forEach(el => {
+        [cpfInput, telInput, cepInput, document.getElementById('email'), document.getElementById('nascimento')].forEach(el => {
             el.addEventListener('input', clearErrorListener);
+            el.addEventListener('focus', clearErrorListener); 
         });
     },
 
     destroy() { 
-
+      
     },
 };
 
 
 const spaRouter = {
     appRoot: null,
-    headerContent: null,
+    headerContainer: null, 
     navLinks: [],
 
     BASE_PATH: '/casa-das-patinhas/parte-4', 
     
+
     routes: { 
         '/': 'home', 
         '/projetos.html': 'projects', 
@@ -284,8 +360,8 @@ const spaRouter = {
     },
 
     normalizePath(path) {
-        
-        if (path.startsWith(this.BASE_PATH)) {
+      
+        if (this.BASE_PATH !== '' && path.startsWith(this.BASE_PATH)) {
             path = path.substring(this.BASE_PATH.length);
         }
 
@@ -293,12 +369,22 @@ const spaRouter = {
             return '/index.html'; 
         }
 
+     
+        if (path.includes('#')) {
+            return path.substring(0, path.indexOf('#'));
+        }
+
         return path;
     },
 
     init() {
         this.appRoot = document.getElementById('app-root');
-        this.headerContent = document.querySelector('header .header-content');
+        this.headerContainer = document.querySelector('header'); 
+
+     
+        this.renderHeader(this.routes[this.normalizePath(window.location.pathname)] || 'notFound');
+        
+    
         this.navLinks = document.querySelectorAll('header nav a');
 
         this.navLinks.forEach(link => { link.addEventListener('click', this.navigate.bind(this)); });
@@ -313,38 +399,59 @@ const spaRouter = {
         
         this.renderPage(this.normalizePath(window.location.pathname)); 
     },
+    
+  
+    renderHeader(pageKey) {
+        this.headerContainer.innerHTML = pageTemplates.header;
+    },
+
 
     navigate(e) {
         e.preventDefault(); 
         
         let targetPath = e.currentTarget.getAttribute('href');
+        let targetHash = '';
         
-        if (targetPath === '/') { 
-            targetPath = '/index.html';
-        } else if (targetPath === '/projetos') {
-            targetPath = '/projetos.html';
-        } else if (targetPath === '/cadastro') { 
-            targetPath = '/cadastro.html';
-        } else if (!targetPath.startsWith('/')) {
-            targetPath = '/' + targetPath; 
+        if (targetPath.includes('#')) {
+            const parts = targetPath.split('#');
+            targetPath = parts[0];
+            targetHash = parts[1];
         }
-        
-        let fullPath = `${this.BASE_PATH}${targetPath}`;
-        
-        const currentNormalizedPath = this.normalizePath(window.location.pathname);
-        
-        
-        if (currentNormalizedPath !== targetPath) {
-             
-             window.history.pushState(null, '', fullPath);
 
-             
-             this.renderPage(targetPath);
+        if (targetPath === '') { targetPath = '/index.html'; }
+        else if (!targetPath.startsWith('/')) { targetPath = '/' + targetPath; }
+
+        let fullPath = `${this.BASE_PATH}${targetPath}`;
+        if (targetHash) fullPath += `#${targetHash}`;
+
+        const currentPath = window.location.pathname;
+        const currentHash = window.location.hash;
+
+
+        const isSamePage = this.normalizePath(currentPath) === this.normalizePath(targetPath);
+        
+        if (isSamePage) {
+           
+            if (targetHash && currentHash !== `#${targetHash}`) {
+                window.history.pushState(null, '', fullPath);
+                document.getElementById(targetHash)?.scrollIntoView({ behavior: 'smooth' });
+            } else if (!targetHash) {
+                 window.history.pushState(null, '', fullPath);
+                 window.scrollTo(0, 0); 
+            }
+        } else {
+            window.history.pushState(null, '', fullPath);
+            this.renderPage(targetPath);
         }
+        
+    
+        mobileNavModule.closeNav();
+        
+       
+        this.updateActiveLink(targetPath);
     },
 
     handlePopState() {
-        
         this.renderPage(this.normalizePath(window.location.pathname));
     },
 
@@ -356,56 +463,63 @@ const spaRouter = {
 
         this.appRoot.innerHTML = pageData.main;
 
-        const currentNav = this.headerContent.querySelector('nav');
-        const currentToggle = this.headerContent.querySelector('.nav-toggle');
-        this.headerContent.innerHTML = pageData.header;
+        const navContainer = document.querySelector('header nav');
+        const toggleButton = document.querySelector('.nav-toggle');
+
+        this.headerContainer.querySelector('.header-content').innerHTML = pageData.header;
         
-        if (currentNav && currentToggle) {
-            this.headerContent.appendChild(currentNav);
-            this.headerContent.appendChild(currentToggle);
-        } 
-    
+   
+        if (navContainer && toggleButton) {
+            this.headerContainer.querySelector('.header-content').appendChild(navContainer.parentElement); 
+        }
+
         document.title = pageData.title;
 
-        
-        this.navLinks.forEach(link => {
-            let linkPath = link.getAttribute('href');
-            
-            if (linkPath === '/') {
-                linkPath = '/index.html';
-            } else if (linkPath === '/projetos') {
-                linkPath = '/projetos.html';
-            } else if (linkPath === '/cadastro') { 
-                linkPath = '/cadastro.html';
-            }
-            
-            if (path === linkPath) {
-                 link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-
-
-        this.appRoot.querySelectorAll('a[data-nav-link]').forEach(link => {
-             const href = link.getAttribute('href');
-             if (href === '/cadastro') link.setAttribute('href', '/cadastro.html');
-             if (href === '/projetos') link.setAttribute('href', '/projetos.html');
-             if (href === '/') link.setAttribute('href', '/index.html');
-        });
-        
-
+     
+        this.updateActiveLink(path);
+       
         formModule.destroy();
         if (pageKey === 'register') { formModule.init(); }
-        window.scrollTo(0, 0);
+        
+    
+        if (window.location.hash) {
+            document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            window.scrollTo(0, 0);
+        }
     },
+    
+    updateActiveLink(currentPath) {
+     
+        this.navLinks.forEach(link => link.classList.remove('active'));
+
+     
+        this.navLinks.forEach(link => {
+         
+            let linkPath = link.getAttribute('href');
+            if (linkPath.includes('#')) {
+                linkPath = linkPath.substring(0, linkPath.indexOf('#'));
+            }
+            
+          
+            if (linkPath === '/') { linkPath = '/index.html'; }
+            else if (linkPath === '/projetos') { linkPath = '/projetos.html'; }
+            else if (linkPath === '/cadastro') { linkPath = '/cadastro.html'; }
+            
+            
+            if (currentPath === linkPath) {
+                link.classList.add('active');
+            }
+        });
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    const anoSpan = document.getElementById('ano-footer');
-    if (anoSpan) {
-        anoSpan.textContent = new Date().getFullYear();
-    }
-
+  
     spaRouter.init();
+    
+    const footerContent = document.querySelector('footer .footer-content p');
+    if (footerContent) {
+        footerContent.innerHTML = `&copy; ${new Date().getFullYear()} Casa das Patinhas. Todos os direitos reservados.`;
+    }
 });
