@@ -276,12 +276,30 @@ const spaRouter = {
     headerContent: null,
     navLinks: [],
 
-    // CORREÇÃO: As rotas agora apontam para os arquivos HTML (necessário para GitHub Pages)
+    
+    BASE_PATH: '/casa-das-patinhas/parte-4', 
+    
+    
     routes: { 
         '/': 'home', 
         '/projetos.html': 'projects', 
         '/cadastro.html': 'register', 
         '/index.html': 'home' 
+    },
+
+    
+    normalizePath(path) {
+        
+        if (path.startsWith(this.BASE_PATH)) {
+            path = path.substring(this.BASE_PATH.length);
+        }
+
+        
+        if (path === '' || path === '/') {
+            return '/index.html'; 
+        }
+
+        return path;
     },
 
     init() {
@@ -298,7 +316,9 @@ const spaRouter = {
         window.addEventListener('popstate', this.handlePopState.bind(this));
 
         mobileNavModule.init();
-        this.renderPage(window.location.pathname);
+        
+        
+        this.renderPage(this.normalizePath(window.location.pathname)); 
     },
 
     navigate(e) {
@@ -306,28 +326,30 @@ const spaRouter = {
         
         let path = e.currentTarget.getAttribute('href');
         
-        // Garante que links internos sejam tratados
-        if (path === '/') path = '/index.html';
+        
+        let fullPath = path;
 
-        if (window.location.pathname !== path) {
-            // Se o link for um HTML, usa o pushState corretamente
-            if (path.endsWith('.html')) {
-                 window.history.pushState(null, '', path);
-                 this.renderPage(path);
-            } else {
-                 // Trata links SPA internos (como os do formulário que usavam /cadastro, /projetos)
-                 window.history.pushState(null, '', path);
-                 this.renderPage(path);
-            }
+        if (path === '/' || path === '/index.html') {
+             fullPath = `${this.BASE_PATH}/index.html`;
+        } else if (path.endsWith('.html')) {
+             fullPath = `${this.BASE_PATH}${path}`;
+        }
+        
+        if (this.normalizePath(window.location.pathname) !== this.normalizePath(fullPath)) {
+            
+             window.history.pushState(null, '', fullPath);
+             
+             this.renderPage(path);
         }
     },
 
     handlePopState() {
-        this.renderPage(window.location.pathname);
+        
+        this.renderPage(this.normalizePath(window.location.pathname));
     },
 
     renderPage(path) {
-        // Normaliza a rota para o lookup do objeto 'routes'
+    
         if (path === '/') path = '/index.html';
 
         const pageKey = this.routes[path] || 'notFound';
@@ -347,7 +369,7 @@ const spaRouter = {
         document.title = pageData.title;
         this.navLinks.forEach(link => {
             const linkPath = link.getAttribute('href');
-            // Correção na lógica de ativação de link: compara a rota normalizada
+            
             const activePath = path === '/index.html' ? '/' : path;
             
             if (linkPath === activePath || (linkPath === '/' && activePath === '/')) {
@@ -357,9 +379,6 @@ const spaRouter = {
             }
         });
 
-
-        // Correção no tratamento de links internos nos templates
-        // Garante que links /cadastro e /projetos nos templates HTML (dentro do JS) funcionem
         this.appRoot.querySelectorAll('a[data-nav-link]').forEach(link => {
              const href = link.getAttribute('href');
              if (href === '/cadastro') link.setAttribute('href', '/cadastro.html');
@@ -373,6 +392,7 @@ const spaRouter = {
         window.scrollTo(0, 0);
     },
 };
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const anoSpan = document.getElementById('ano-footer');
