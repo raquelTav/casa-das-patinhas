@@ -64,7 +64,7 @@ const pageTemplates = {
         <section class="projects" aria-labelledby="projetos-title">
             <h2 id="projetos-title">Nossas iniciativas</h2>
             
-            <article class="project" id="voluntariado" aria-labelledby="voluntariado-title">
+            <article class="project card" id="voluntariado" aria-labelledby="voluntariado-title">
                 <div class="tags">
                     <span class="badge">Adoção</span>
                     <span class="badge badge-secondary">Comunidade</span>
@@ -83,7 +83,7 @@ const pageTemplates = {
                 </ol>
             </article>
             
-            <article class="project" id="castracao" aria-labelledby="castracao-title">
+            <article class="project card" id="castracao" aria-labelledby="castracao-title">
                 <div class="tags">
                     <span class="badge badge-secondary">Saúde</span>
                     <span class="badge">Prevenção</span>
