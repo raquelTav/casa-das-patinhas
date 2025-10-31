@@ -10,18 +10,19 @@
     --color-white: #ffffff;
     --color-border: #B2DFDB;
 
+ 
     --fs-h1: 2.5rem;
     --fs-h2: 1.8rem;
     --fs-h3: 1.4rem;
     --fs-body: 1rem;
     --fs-small: 0.85rem;
 
-    --space-xs: 8px;    
-    --space-sm: 16px;  
-    --space-md: 24px;  
-    --space-lg: 32px;   
-    --space-xl: 48px;   
-    --space-xxl: 64px;  
+    --space-xs: 8px;
+    --space-sm: 16px;
+    --space-md: 24px;
+    --space-lg: 32px;
+    --space-xl: 48px;
+    --space-xxl: 64px;
 
     --font-primary: 'Poppins', sans-serif;
     --header-height: 60px;
@@ -119,6 +120,10 @@ header nav ul {
     gap: var(--space-sm);
 }
 
+header nav li {
+    position: relative;
+}
+
 header nav a {
     color: var(--color-text);
     font-weight: 600;
@@ -132,6 +137,36 @@ header nav a.active {
     background-color: var(--color-primary);
     color: var(--color-white);
     text-decoration: none;
+}
+
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--color-white);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    min-width: 150px;
+    padding: var(--space-xs) 0;
+    list-style: none;
+    z-index: 100;
+}
+
+header nav li:hover > .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu a {
+    color: var(--color-text);
+    padding: 10px 15px;
+    display: block;
+    white-space: nowrap;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--color-background);
 }
 
 .nav-toggle {
@@ -218,6 +253,18 @@ body.nav-open .nav-toggle-icon::after {
         display: block;
         padding: 10px var(--space-sm);
         border-radius: 8px;
+    }
+    
+    .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        padding-left: var(--space-sm);
+    }
+    header nav li:hover > .dropdown-menu {
+        display: none;
+    }
+    body.nav-open header nav li:hover > .dropdown-menu {
+        display: block;
     }
 }
 
@@ -314,7 +361,6 @@ textarea {
     resize: vertical;
 }
 
-
 .actions {
     display: flex;
     justify-content: flex-end;
@@ -354,7 +400,6 @@ button[type="reset"]:hover {
     transform: translateY(-2px);
 }
 
-
 #formMessage {
     margin-top: var(--space-sm);
     padding: 10px;
@@ -373,6 +418,52 @@ button[type="reset"]:hover {
     background-color: #e8f5e9;
     color: var(--color-accent);
     border: 1px solid var(--color-primary);
+}
+
+.alert {
+    padding: var(--space-sm) var(--space-md);
+    margin: var(--space-md) 0;
+    border-radius: var(--space-xs);
+    font-weight: 600;
+    border: 1px solid;
+}
+
+.alert-success {
+    background-color: #e8f5e9;
+    color: var(--color-accent);
+    border-color: var(--color-primary);
+}
+
+.alert-error {
+    background-color: #ffebee;
+    color: #c62828;
+    border-color: #c62828;
+}
+
+.toast-container {
+    position: fixed;
+    top: calc(var(--header-height) + 10px);
+    right: var(--space-md);
+    z-index: 1050;
+}
+
+.badge {
+    display: inline-block;
+    padding: var(--space-xs) var(--space-sm);
+    margin-right: var(--space-xs);
+    margin-bottom: var(--space-xs);
+    border-radius: 999px;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.badge-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-text);
 }
 
 
@@ -444,7 +535,6 @@ footer a:hover {
     border-width: 0;
 }
 
-
 @media (max-width: 576px) {
     .container {
         padding: var(--space-xs) 0;
@@ -456,34 +546,21 @@ footer a:hover {
     }
 }
 
-
-@media (max-width: 768px) {
-    .nav-toggle {
-        display: block;
-    }
-    
-  
-}
-
 @media (min-width: 769px) and (max-width: 992px) {
     .container {
         width: 95%;
     }
 }
 
-
 @media (min-width: 993px) and (max-width: 1200px) {
-    
 }
-
 
 @media (min-width: 1201px) {
     .container {
         max-width: 1400px;
     }
-    h1 { font-size: var(--fs-h1); } 
+    h1 { font-size: var(--fs-h1); }
 }
-
 
 @media (prefers-color-scheme: dark) {
     :root {
