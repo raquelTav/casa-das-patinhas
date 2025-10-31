@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <link rel="shortcut icon" href="assets/imagens/logo.png" type="image/x-icon">
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <title>Casa das Patinhas — Projetos</title>
+    <meta name="description" content="Conheça os projetos sociais e iniciativas da Casa das Patinhas. Saiba como ser voluntário e ajudar animais.">
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Casa das Patinhas</h1>
+
+            <nav aria-label="Navegação principal">
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="projetos.html" class="active">Projetos</a></li>
+                    <li><a href="cadastro.html">Cadastro</a></li>
+                </ul>
+            </nav>
+
+            <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+                <span class="nav-toggle-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="projects" aria-labelledby="projetos-title">
+            <h2 id="projetos-title">Nossas iniciativas</h2>
+
+            <article class="project" aria-labelledby="voluntariado-title">
+                <h3 id="voluntariado-title">Voluntariado</h3>
+                <figure>
+                    <img src="assets/imagens/voluntarios-ong.jpg" alt="Voluntária cuidando de um cão">
+                    <figcaption>Grupo de voluntários em nossa ONG.</figcaption>
+                </figure>
+
+                <p>Quem pode ser voluntário? Qualquer pessoa maior de idade, com disponibilidade mínima semanal, pode participar. Temos tarefas presenciais e remotas.</p>
+
+                <h4>Como se inscrever</h4>
+                <ol>
+                    <li>Preencha o formulário de <a href="cadastro.html">cadastro</a>.</li>
+                    <li>Participe de uma reunião de orientação.</li>
+                    <li>Receba treinamento sobre manejo e cuidado animal.</li>
+                </ol>
+            </article>
+
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; <span id="ano-footer"></span> Casa das Patinhas — Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('ano-footer').textContent = new Date().getFullYear();
+    </script>
+
+    <script src="assets/js/script.js"></script> 
+    </body>
+</html>
