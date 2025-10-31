@@ -1,12 +1,12 @@
 const pageTemplates = {
     header: `
         <div class="header-content container">
-            <h1>Casa das Patinhas</h1>
+            <div id="page-header-content"></div>
             <nav role="navigation" id="main-navigation" aria-label="Navegação Principal">
                 <ul>
                     <li><a href="/index.html" data-nav-link>Início</a></li>
                     <li>
-                        <a href="/projetos.html" data-nav-link>Projetos</a>
+                        <a href="/projetos.html" data-nav-link aria-haspopup="true" aria-expanded="false">Projetos</a>
                         <ul class="dropdown-menu">
                             <li><a href="/projetos.html#adocao" data-nav-link>Adoção</a></li>
                             <li><a href="/projetos.html#voluntariado" data-nav-link>Voluntariado</a></li>
@@ -307,7 +307,7 @@ const formModule = {
         msg.textContent = 'Cadastro enviado com sucesso! Entraremos em contato em breve.';
         msg.className = 'small alert-success'; 
         
-      
+        
         setTimeout(() => {
             form.reset();
             msg.textContent = '';
@@ -339,7 +339,7 @@ const formModule = {
     },
 
     destroy() { 
-      
+        
     },
 };
 
@@ -360,7 +360,7 @@ const spaRouter = {
     },
 
     normalizePath(path) {
-      
+        
         if (this.BASE_PATH !== '' && path.startsWith(this.BASE_PATH)) {
             path = path.substring(this.BASE_PATH.length);
         }
@@ -369,7 +369,7 @@ const spaRouter = {
             return '/index.html'; 
         }
 
-     
+       
         if (path.includes('#')) {
             return path.substring(0, path.indexOf('#'));
         }
@@ -381,10 +381,9 @@ const spaRouter = {
         this.appRoot = document.getElementById('app-root');
         this.headerContainer = document.querySelector('header'); 
 
-     
-        this.renderHeader(this.routes[this.normalizePath(window.location.pathname)] || 'notFound');
+        this.headerContainer.innerHTML = pageTemplates.header;
         
-    
+        
         this.navLinks = document.querySelectorAll('header nav a');
 
         this.navLinks.forEach(link => { link.addEventListener('click', this.navigate.bind(this)); });
@@ -400,9 +399,8 @@ const spaRouter = {
         this.renderPage(this.normalizePath(window.location.pathname)); 
     },
     
-  
     renderHeader(pageKey) {
-        this.headerContainer.innerHTML = pageTemplates.header;
+        
     },
 
 
@@ -431,23 +429,23 @@ const spaRouter = {
         const isSamePage = this.normalizePath(currentPath) === this.normalizePath(targetPath);
         
         if (isSamePage) {
-           
+            
             if (targetHash && currentHash !== `#${targetHash}`) {
                 window.history.pushState(null, '', fullPath);
                 document.getElementById(targetHash)?.scrollIntoView({ behavior: 'smooth' });
             } else if (!targetHash) {
-                 window.history.pushState(null, '', fullPath);
-                 window.scrollTo(0, 0); 
+                window.history.pushState(null, '', fullPath);
+                window.scrollTo(0, 0); 
             }
         } else {
             window.history.pushState(null, '', fullPath);
             this.renderPage(targetPath);
         }
         
-    
+        
         mobileNavModule.closeNav();
         
-       
+        
         this.updateActiveLink(targetPath);
     },
 
@@ -461,27 +459,36 @@ const spaRouter = {
         const pageKey = this.routes[path] || 'notFound'; 
         const pageData = pageTemplates[pageKey];
 
+        
         this.appRoot.innerHTML = pageData.main;
 
-        const navContainer = document.querySelector('header nav');
-        const toggleButton = document.querySelector('.nav-toggle');
-
-        this.headerContainer.querySelector('.header-content').innerHTML = pageData.header;
         
-   
-        if (navContainer && toggleButton) {
-            this.headerContainer.querySelector('.header-content').appendChild(navContainer.parentElement); 
+        const brandContainer = document.getElementById('page-header-content');
+        if (brandContainer) {
+            brandContainer.innerHTML = pageData.header;
         }
-
+        
         document.title = pageData.title;
 
-     
+        
+        const mainContent = this.appRoot;
+        mainContent.setAttribute('tabindex', '-1'); 
+        mainContent.focus(); 
+        
+        const announcer = document.getElementById('route-announcer');
+        if (announcer) {
+            announcer.textContent = `Página carregada: ${pageData.title}`;
+        }
+        mainContent.removeAttribute('tabindex'); 
+        
+
+        
         this.updateActiveLink(path);
-       
+        
         formModule.destroy();
         if (pageKey === 'register') { formModule.init(); }
         
-    
+        
         if (window.location.hash) {
             document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ behavior: 'smooth' });
         } else {
@@ -490,18 +497,18 @@ const spaRouter = {
     },
     
     updateActiveLink(currentPath) {
-     
+        
         this.navLinks.forEach(link => link.classList.remove('active'));
 
-     
+        
         this.navLinks.forEach(link => {
-         
+            
             let linkPath = link.getAttribute('href');
             if (linkPath.includes('#')) {
                 linkPath = linkPath.substring(0, linkPath.indexOf('#'));
             }
             
-          
+            
             if (linkPath === '/') { linkPath = '/index.html'; }
             else if (linkPath === '/projetos') { linkPath = '/projetos.html'; }
             else if (linkPath === '/cadastro') { linkPath = '/cadastro.html'; }
@@ -515,7 +522,7 @@ const spaRouter = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  
+    
     spaRouter.init();
     
     const footerContent = document.querySelector('footer .footer-content p');
