@@ -5,17 +5,20 @@ const pageTemplates = {
             <nav role="navigation" id="main-navigation" aria-label="Navegação Principal">
                 <ul>
                     <li><a href="/index.html" data-nav-link>Início</a></li>
-                    <li>
-                        <a href="/projetos.html" data-nav-link aria-haspopup="true" aria-expanded="false">Projetos</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/projetos.html#voluntariado" data-nav-link>Voluntariado</a></li>
-                            <li><a href="/projetos.html#castracao" data-nav-link>Saúde Animal</a></li>
+                    <li role="none">
+                        <a href="/projetos.html" data-nav-link aria-haspopup="true" aria-expanded="false" role="menuitem">Projetos</a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/projetos.html#voluntariado" data-nav-link role="menuitem">Voluntariado</a></li>
+                            <li><a href="/projetos.html#castracao" data-nav-link role="menuitem">Saúde Animal</a></li>
                         </ul>
                     </li>
                     <li><a href="/cadastro.html" data-nav-link>Cadastro</a></li>
                 </ul>
             </nav>
 
+            <button id="contrast-toggle" class="btn-contrast" aria-label="Alternar modo de Alto Contraste" title="Alternar Alto Contraste">
+                AC
+            </button>
             <button class="nav-toggle" aria-expanded="false" aria-controls="main-navigation">
                 <span class="sr-only">Menu</span>
                 <span class="nav-toggle-icon" aria-hidden="true"></span>
@@ -33,22 +36,22 @@ const pageTemplates = {
             <p>Somos uma organização sem fins lucrativos dedicada ao resgate, reabilitação e adoção de animais domésticos. Trabalhamos com voluntários, veterinários parceiros e apoio da comunidade.</p>
             <p>Atuamos nas áreas de resgate, castração, educação e reintegração familiar para animais em situação de risco.</p>
             </div>
-            <figure>
-            <img src="assets/imagens/Voluntaria-ONG.jpg" alt="pessoa cercada por cães" width="400">
+            <figure role="img" aria-label="Voluntária em nossa ONG cercada por cães.">
+            <img src="assets/imagens/Voluntaria-ONG.jpg" alt="Voluntária em nossa ONG cercada por cães." width="400">
             <figcaption>Voluntária visitando nossa ONG.</figcaption>
             </figure>
         </section>
         <section aria-labelledby="contato-title" class="card">
             <h2 id="contato-title">Informações de contato</h2>
             <address>
-            <p><strong>Telefone:</strong> (85) 98678-9980</p>
+            <p><strong>Telefone:</strong> <a href="tel:+5585986789980">(85) 98678-9980</a></p>
             <p><strong>E-mail:</strong> <a href="mailto:contato@casadaspatinhas.org.br">contato@casadaspatinhas.org.br</a></p>
             <p><strong>Endereço (sede):</strong> Rua cinco, 333 — Fortaleza, CE</p>
             </address>
         </section>
         <section aria-labelledby="adote-title" class="card">
             <h2 id="adote-title">Como adotar</h2>
-            <p>Você pode conhecer nossos animais através das campanhas e feiras de adoção. Para iniciar o processo, preencha o formulário de cadastro e agende uma visita.</p>
+            <p>Você pode conhecer nossos animais através das campanhas e feiras de adoção. Para iniciar o processo, preença o formulário de cadastro e agende uma visita.</p>
             <p><a href="/cadastro.html" class="btn btn-cta" data-nav-link>Ir para o formulário de cadastro</a></p>
         </section>
         `,
@@ -68,7 +71,7 @@ const pageTemplates = {
                 </div>
                 
                 <h3 id="voluntariado-title">Voluntariado</h3>
-                <figure>
+                <figure role="img" aria-label="Voluntários juntando as mãos em sinal de união.">
                     <img src="assets/imagens/voluntarios-ONG.jpg" alt="Voluntáros em nossa ONG">
                 </figure>
                 <p>Quem pode ser voluntário? Qualquer pessoa maior de idade, com disponibilidade mínima semanal, pode participar. Temos tarefas presenciais e remotas.</p>
@@ -102,7 +105,7 @@ const pageTemplates = {
         title: 'Cadastro — Casa das Patinhas',
         header: `<div class="header-brand"><h1>Formulário de Cadastro</h1></div>`,
         main: `
-        <figure>
+        <figure role="img" aria-label="Filhotes de cães fofos olhando para a câmera.">
             <img src="assets/imagens/adocao-ONG.jpg" alt="cães filhotes para adoção">
             <figcaption>Faça parte da mudança: cadastre-se e ajude um animal a encontrar um lar.</figcaption>
         </figure>
@@ -122,7 +125,6 @@ const pageTemplates = {
                 <div>
                 <label for="cpf">CPF *</label>
                 <input id="cpf" name="cpf" type="text" inputmode="numeric" required maxlength="14" placeholder="000.000.000-00" aria-describedby="cpfHelp">
-                <p id="cpfHelp" class="small">Formato: 000.000.000-00</p>
                 </div>
                 <div>
                 <label for="telefone">Telefone *</label>
@@ -142,6 +144,7 @@ const pageTemplates = {
                 </select>
                 </div>
             </div>
+            <p id="cpfHelp" class="small sr-only">Formato: 000.000.000-00</p>
             </fieldset>
             <fieldset>
             <legend>Endereço</legend>
@@ -185,7 +188,6 @@ const pageTemplates = {
     },
 };
 
-
 const mobileNavModule = {
     init() {
         const navToggle = document.querySelector('.nav-toggle');
@@ -220,6 +222,46 @@ const mobileNavModule = {
     }
 };
 
+const contrastModule = {
+    init() {
+        this.toggleButton = document.getElementById('contrast-toggle');
+        this.body = document.body;
+        this.localStorageKey = 'highContrastEnabled';
+
+        this.loadState();
+        
+        if (this.toggleButton) {
+            this.toggleButton.removeEventListener('click', this.toggleContrast.bind(this));
+            this.toggleButton.addEventListener('click', this.toggleContrast.bind(this));
+        }
+    },
+    
+    loadState() {
+        const enabled = localStorage.getItem(this.localStorageKey) === 'true';
+        if (enabled) {
+            this.body.classList.add('high-contrast');
+        } else {
+            this.body.classList.remove('high-contrast');
+        }
+    },
+
+    toggleContrast() {
+        this.body.classList.toggle('high-contrast');
+        const isEnabled = this.body.classList.contains('high-contrast');
+        localStorage.setItem(this.localStorageKey, isEnabled);
+        
+        this.announceChange(isEnabled);
+    },
+    
+    announceChange(isEnabled) {
+        const announcer = document.getElementById('route-announcer');
+        if (announcer) {
+            announcer.textContent = isEnabled 
+                ? 'Modo de Alto Contraste Ativado.' 
+                : 'Modo de Alto Contraste Desativado.';
+        }
+    }
+};
 
 const formModule = {
     utils: {
@@ -301,10 +343,27 @@ const formModule = {
                 return; 
             }
         }
-
-        msg.textContent = 'Cadastro enviado com sucesso! Entraremos em contato em breve.';
-        msg.className = 'small alert-success'; 
         
+        // 1. Coletar Dados
+        const formData = new FormData(form);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+        
+        // 2. Salvar no LocalStorage
+        try {
+            let cadastros = JSON.parse(localStorage.getItem('cadastros')) || [];
+            cadastros.push(data);
+            localStorage.setItem('cadastros', JSON.stringify(cadastros));
+            
+            msg.textContent = 'Cadastro enviado e salvo localmente com sucesso!';
+            msg.className = 'small alert-success'; 
+        } catch (error) {
+            msg.textContent = 'Erro ao salvar os dados localmente.';
+            msg.className = 'small error'; 
+        }
+
         
         setTimeout(() => {
             form.reset();
@@ -354,7 +413,6 @@ const spaRouter = {
     navLinks: [],
 
     BASE_PATH: '', 
-    
 
     routes: { 
         '/': 'home', 
@@ -389,7 +447,7 @@ const spaRouter = {
         this.headerContainer.innerHTML = pageTemplates.header;
         
         
-        this.navLinks = document.querySelectorAll('header nav a');
+        this.navLinks = document.querySelectorAll('header nav a[data-nav-link]');
 
         this.navLinks.forEach(link => { link.addEventListener('click', this.navigate.bind(this)); });
         
@@ -402,6 +460,7 @@ const spaRouter = {
         window.addEventListener('popstate', this.handlePopState.bind(this));
 
         mobileNavModule.init();
+        contrastModule.init(); // Inicializa o novo módulo de contraste
         
         this.renderPage(this.normalizePath(window.location.pathname)); 
     },
